@@ -26,13 +26,12 @@ from fastapi import FastAPI, HTTPException
 from mlflow.tracking import MlflowClient
 from pydantic import BaseModel, ConfigDict, Field
 
-from src.mlflow_config import resolve_tracking_uri
+from src.config import MLFLOW_CONFIG
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
 logger = logging.getLogger(__name__)
 
 ROOT = Path(__file__).resolve().parents[2]
-PARAMS_PATH = ROOT / "params.yaml"
 FALLBACK_MODEL_PATH = ROOT / "models" / "baseline_pipeline.joblib"
 
 ml_models = {}
@@ -40,14 +39,10 @@ ml_models = {}
 
 def load_champion_from_registry() -> tuple:
     """Returns (pipeline, version_label). Raises if unavailable."""
-    params = yaml.safe_load(PARAMS_PATH.read_text())
-    mlflow_params = params["mlflow"]
 
-    tracking_uri = resolve_tracking_uri(mlflow_params["tracking_uri"])
-    mlflow.set_tracking_uri(mlflow_params["tracking_uri"])
-    mlflow.set_tracking_uri(tracking_uri)
-    logger.info(f"MLflow tracking URI: {tracking_uri}")
-    model_name = mlflow_params["registered_model_name"]
+    mlflow.set_tracking_uri(MLFLOW_CONFIG['tracking_uri'])
+    logger.info(f"MLflow tracking URI: {MLFLOW_CONFIG['tracking_uri']}")
+    model_name = MLFLOW_CONFIG["registered_model_name"]
 
     client = MlflowClient()
     champion = client.get_model_version_by_alias(model_name, "champion")

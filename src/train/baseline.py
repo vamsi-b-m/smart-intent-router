@@ -31,7 +31,7 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score, f1_score
 from sklearn.pipeline import Pipeline
 
-from src.mlflow_config import resolve_tracking_uri
+from src.config import TRAIN_CONFIG, MLFLOW_CONFIG
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
 logger = logging.getLogger(__name__)
@@ -39,14 +39,8 @@ logger = logging.getLogger(__name__)
 ROOT = Path(__file__).resolve().parents[2]
 PROCESSED_DIR = ROOT / "data" / "processed"
 MODELS_DIR = ROOT / "models"
-PARAMS_PATH = ROOT / "params.yaml"
 
 LABEL_COL = "route"
-
-
-def load_params() -> dict:
-    return yaml.safe_load(PARAMS_PATH.read_text())
-
 
 def load_split(name: str) -> pd.DataFrame:
     return pd.read_csv(PROCESSED_DIR / f"{name}.csv")
@@ -82,15 +76,12 @@ def build_pipeline(train_params: dict) -> Pipeline:
 
 
 def main():
-    params = load_params()
-    train_params = params["train"]
-    mlflow_params = params["mlflow"]
+    train_params = TRAIN_CONFIG
 
-    tracking_uri = resolve_tracking_uri(mlflow_params["tracking_uri"])
-    mlflow.set_tracking_uri(mlflow_params["tracking_uri"])
-    mlflow.set_experiment(mlflow_params["experiment_name"])
-    logger.info(f"MLflow tracking URI: {tracking_uri}")
-    
+    mlflow.set_tracking_uri(MLFLOW_CONFIG["tracking_uri"])
+    mlflow.set_experiment(MLFLOW_CONFIG["experiment_name"])
+    logger.info(f"MLflow tracking URI: {MLFLOW_CONFIG['tracking_uri']}")
+
     train_df = load_split("train")
     val_df = load_split("val")
 
@@ -98,10 +89,10 @@ def main():
     logger.info(f"Params: {train_params}")
 
     with mlflow.start_run() as run:
-        mlflow.log_params(train_params)
+        mlflow.log_params(TRAIN_CONFIG)
         mlflow.log_params({"n_train": len(train_df)})
 
-        pipeline = build_pipeline(train_params)
+        pipeline = build_pipeline(TRAIN_CONFIG)
         pipeline.fit(train_df["text"], train_df[LABEL_COL])
 
         val_preds = pipeline.predict(val_df["text"])
@@ -121,7 +112,7 @@ def main():
         model_info = mlflow.sklearn.log_model(
             pipeline,
             artifact_path="model",
-            registered_model_name=mlflow_params["registered_model_name"],
+            registered_model_name=MLFLOW_CONFIG["registered_model_name"],
         )
 
         MODELS_DIR.mkdir(parents=True, exist_ok=True)
@@ -143,7 +134,7 @@ def main():
         logger.info(f"Saved metrics to {metrics_path}")
         logger.info(
             f"MLflow run: {run.info.run_id} | "
-            f"registered as '{mlflow_params['registered_model_name']}'"
+            f"registered as '{MLFLOW_CONFIG['registered_model_name']}'"
             f"v{model_info.registered_model_version}"
         )
 

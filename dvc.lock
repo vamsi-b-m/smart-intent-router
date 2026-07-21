@@ -44,11 +44,11 @@ stages:
     outs:
     - path: models/baseline_pipeline.joblib
       hash: md5
-      md5: 3accf6fe97ac5b54100b508151278bb5
+      md5: e048e84ca46f3a5cb128b5fa02079a52
       size: 942465
     - path: models/train_metrics.json
       hash: md5
-      md5: 3cac4ee1e3824ec21861ca64b6ea2a84
+      md5: 36cec346aa48c88aaea343b0f01ac994
       size: 255
   evaluate:
     cmd: python3 -m src.eval.evaluate
@@ -59,7 +59,7 @@ stages:
       size: 415144
     - path: models/baseline_pipeline.joblib
       hash: md5
-      md5: 3accf6fe97ac5b54100b508151278bb5
+      md5: e048e84ca46f3a5cb128b5fa02079a52
       size: 942465
     - path: src/eval/evaluate.py
       hash: md5
@@ -68,5 +68,5 @@ stages:
     outs:
     - path: models/eval_metrics.json
       hash: md5
-      md5: 081a9f11f9c1e0a511d35a45726b73c0
+      md5: 077cd4df1d08747c72007962af5ab0fa
       size: 1962
