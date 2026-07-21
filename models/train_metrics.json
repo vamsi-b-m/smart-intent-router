@@ -1,8 +1,0 @@
-{
-  "val_accuracy": 0.932258064516129,
-  "val_macro_f1": 0.8375012278905383,
-  "n_train": 15100,
-  "mlflow_run_id": "9f375ca33a0348b793e1219d4be22b44",
-  "mlflow_model_uri": "runs:/9f375ca33a0348b793e1219d4be22b44/model",
-  "registered_model_version": 4
-}
