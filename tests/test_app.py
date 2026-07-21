@@ -39,7 +39,7 @@ def test_route_returns_valid_shape(client):
     resp = client.post("/route", json={"text": "I need to reset my card pin"})
     assert resp.status_code == 200
     body = resp.json()
-    assert set(body.keys()) == {"route", "confidence", "top_k"}
+    assert set(body.keys()) == {"route", "confidence", "top_k", "model_version"}
     assert 0.0 <= body["confidence"] <= 1.0
     assert len(body["top_k"]) == 3
 
