@@ -1,0 +1,5 @@
+.venv
+.dvc/
+data/
+*__pychache__*
+*__init.py__*

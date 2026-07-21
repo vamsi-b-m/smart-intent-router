@@ -1,0 +1,99 @@
+{
+  "test_accuracy": 0.8129090909090909,
+  "test_macro_f1": 0.771708766104293,
+  "n_test": 5500,
+  "per_class_report": {
+    "billing_agent": {
+      "precision": 0.9327641408751334,
+      "recall": 0.9711111111111111,
+      "f1-score": 0.9515514425694066,
+      "support": 900.0
+    },
+    "chitchat_agent": {
+      "precision": 0.7931034482758621,
+      "recall": 0.9711111111111111,
+      "f1-score": 0.8731268731268731,
+      "support": 450.0
+    },
+    "fallback_human": {
+      "precision": 0.8438818565400844,
+      "recall": 0.2,
+      "f1-score": 0.32336297493936944,
+      "support": 1000.0
+    },
+    "general_agent": {
+      "precision": 0.7830433172898926,
+      "recall": 0.94,
+      "f1-score": 0.8543728539688952,
+      "support": 2250.0
+    },
+    "tech_support_agent": {
+      "precision": 0.7867783985102421,
+      "recall": 0.9388888888888889,
+      "f1-score": 0.85612968591692,
+      "support": 900.0
+    },
+    "accuracy": 0.8129090909090909,
+    "macro avg": {
+      "precision": 0.827914232298243,
+      "recall": 0.8042222222222222,
+      "f1-score": 0.771708766104293,
+      "support": 5500.0
+    },
+    "weighted avg": {
+      "precision": 0.8200389377478762,
+      "recall": 0.8129090909090909,
+      "f1-score": 0.7755494554389399,
+      "support": 5500.0
+    }
+  },
+  "confusion_matrix": {
+    "labels": [
+      "billing_agent",
+      "chitchat_agent",
+      "fallback_human",
+      "general_agent",
+      "tech_support_agent"
+    ],
+    "matrix": [
+      [
+        874,
+        2,
+        2,
+        20,
+        2
+      ],
+      [
+        0,
+        437,
+        1,
+        2,
+        10
+      ],
+      [
+        44,
+        69,
+        200,
+        540,
+        147
+      ],
+      [
+        18,
+        18,
+        29,
+        2115,
+        70
+      ],
+      [
+        1,
+        25,
+        5,
+        24,
+        845
+      ]
+    ]
+  },
+  "promoted_to_champion": false,
+  "model_version": "4",
+  "previous_champion_version": 3
+}

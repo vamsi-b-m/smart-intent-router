@@ -1,0 +1,15 @@
+# Hyperparameters tracked by DVC. Override per-experiment with:
+#   dvc exp run --set-param train.C=1.0
+# DVC diffs this file across experiments/commits so every run's config
+# is reproducible and comparable, independent of MLflow.
+
+train:
+  C: 1.0                    # inverse regularization strength for LogisticRegression
+  ngram_max: 2              # TF-IDF ngram_range = (1, ngram_max)
+  max_features: 20000
+  class_weight: balanced    # "balanced" or "none" -- fallback_human is a minority class
+
+mlflow:
+  experiment_name: smart-intent-router-routing
+  registered_model_name: smart-intent-router
+  tracking_uri: sqlite:///mlflow.db

@@ -1,0 +1,36 @@
+stages:
+  prepare_data:
+    cmd:  python3 -m src.data.load_data
+    deps:
+      - src/data/load_data.py
+    outs:
+      - data/processed/train.csv
+      - data/processed/val.csv
+      - data/processed/test.csv
+
+  train:
+    cmd:  python3 -m src.train.baseline
+    deps:
+      - src/train/baseline.py
+      - data/processed/train.csv
+      - data/processed/val.csv
+    params:
+      - train.C
+      - train.ngram_max
+      - train.max_features
+      - train.class_weight
+    outs:
+      - models/baseline_pipeline.joblib
+    metrics:
+      - models/train_metrics.json:
+          cache: false
+
+  evaluate:
+    cmd:  python3 -m src.eval.evaluate
+    deps:
+      - src/eval/evaluate.py
+      - models/baseline_pipeline.joblib
+      - data/processed/test.csv
+    metrics:
+      - models/eval_metrics.json:
+          cache: false

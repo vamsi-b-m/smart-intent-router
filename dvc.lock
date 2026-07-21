@@ -1,0 +1,72 @@
+schema: '2.0'
+stages:
+  prepare_data:
+    cmd: python3 -m src.data.load_data
+    deps:
+    - path: src/data/load_data.py
+      hash: md5
+      md5: e5314d6d68baa96574e1d1de4b5e3e58
+      size: 7875
+    outs:
+    - path: data/processed/test.csv
+      hash: md5
+      md5: 27a66964848900e385dafd1c0e0377b8
+      size: 415144
+    - path: data/processed/train.csv
+      hash: md5
+      md5: de8b8ad707be5e4ba49a8b6d89fd8b77
+      size: 1165280
+    - path: data/processed/val.csv
+      hash: md5
+      md5: ebc0d0f538f0f29e013d787ea2dae8e0
+      size: 237699
+  train:
+    cmd: python3 -m src.train.baseline
+    deps:
+    - path: data/processed/train.csv
+      hash: md5
+      md5: de8b8ad707be5e4ba49a8b6d89fd8b77
+      size: 1165280
+    - path: data/processed/val.csv
+      hash: md5
+      md5: ebc0d0f538f0f29e013d787ea2dae8e0
+      size: 237699
+    - path: src/train/baseline.py
+      hash: md5
+      md5: 88b939c22307f25fae6d12c7f3acba62
+      size: 5191
+    params:
+      params.yaml:
+        train.C: 1.0
+        train.class_weight: balanced
+        train.max_features: 20000
+        train.ngram_max: 2
+    outs:
+    - path: models/baseline_pipeline.joblib
+      hash: md5
+      md5: 3accf6fe97ac5b54100b508151278bb5
+      size: 942465
+    - path: models/train_metrics.json
+      hash: md5
+      md5: 3cac4ee1e3824ec21861ca64b6ea2a84
+      size: 255
+  evaluate:
+    cmd: python3 -m src.eval.evaluate
+    deps:
+    - path: data/processed/test.csv
+      hash: md5
+      md5: 27a66964848900e385dafd1c0e0377b8
+      size: 415144
+    - path: models/baseline_pipeline.joblib
+      hash: md5
+      md5: 3accf6fe97ac5b54100b508151278bb5
+      size: 942465
+    - path: src/eval/evaluate.py
+      hash: md5
+      md5: 10202b7b64c003d0148e10f5ab8ff24e
+      size: 6062
+    outs:
+    - path: models/eval_metrics.json
+      hash: md5
+      md5: 081a9f11f9c1e0a511d35a45726b73c0
+      size: 1962
